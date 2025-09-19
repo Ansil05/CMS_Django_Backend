@@ -3,5 +3,3 @@ __pycache__/
 *.pyo
 *.pyd
 myvenv/
-cms_backend/
-migrations/
