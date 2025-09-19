@@ -1,5 +1,6 @@
 
 from django.db import models
+from adminbackendapi.models import Doctor
 
 # Patient model
 class Patient(models.Model):
@@ -23,7 +24,7 @@ class Patient(models.Model):
 
 class Appointment(models.Model):
 	token_number = models.IntegerField(unique=True)
-	doc_id = models.IntegerField()
+	doc_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
 	appointment_date = models.DateTimeField()
 	appointment_time = models.TimeField()
