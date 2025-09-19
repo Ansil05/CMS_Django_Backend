@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'cms_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'clinic_django_db',
+        'NAME': 'cms_django_db',
         'USER': 'root',
-        'PASSWORD': 'faith',
+        'PASSWORD': 'thahseel',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': 3306
     }
 }
 
