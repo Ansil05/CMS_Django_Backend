@@ -3,5 +3,5 @@ __pycache__/
 *.pyo
 *.pyd
 myvenv/
-settings.py
+cms_backend/
 migrations/
