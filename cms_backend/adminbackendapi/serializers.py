@@ -26,11 +26,11 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
-    Role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+    Role = RoleSerializer()
 
     class Meta:
         model = Staff
-        fields = "__all__"
+        fields = ["FirstName", "LastName", "DOB", "PhoneNumber", "Role", "Email", "Address","PhoneNumber","Address","HireDate","IsActive"]
 
     def validate_FirstName(self, value):
         if not value.isalpha():
@@ -58,12 +58,12 @@ class StaffSerializer(serializers.ModelSerializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    Staff = serializers.PrimaryKeyRelatedField(queryset=Staff.objects.all())
-    Specialization = serializers.PrimaryKeyRelatedField(queryset=Specialization.objects.all())
+    Staff = StaffSerializer()
+    Specialization = SpecializationSerializer()
 
     class Meta:
         model = Doctor
-        fields = "__all__"
+        fields = ["Staff", "Specialization", "ConsultationFee", "availability", "YearsOfExperience"]
 
     def validate_ConsultationFee(self, value):
         if value < 0:
