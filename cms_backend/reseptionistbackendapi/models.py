@@ -4,6 +4,7 @@ from adminbackendapi.models import Doctor
 
 # Patient model
 class Patient(models.Model):
+	Patient_id = models.AutoField(primary_key=True)
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	dob = models.DateField()
@@ -23,6 +24,7 @@ class Patient(models.Model):
 
 
 class Appointment(models.Model):
+	appointment_id = models.AutoField(primary_key=True)
 	token_number = models.IntegerField(unique=True)
 	doc_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
@@ -37,10 +39,11 @@ class Appointment(models.Model):
 		super().save(*args, **kwargs)
 
 	def __str__(self):
-		return f"Appointment for {self.patient} on {self.appointment_date} scheduled successfully with token {self.token_number}"
+		return f"{self.appointment_id} - {self.patient.first_name} {self.patient.last_name}"
 
 # ReceptionBill model
 class ReceptionBill(models.Model):
+	bill_id = models.AutoField(primary_key=True)
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='bills')
 	appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='bills')
 	reg_fee = models.DecimalField(max_digits=8, decimal_places=2)
