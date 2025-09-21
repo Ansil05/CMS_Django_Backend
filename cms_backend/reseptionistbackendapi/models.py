@@ -7,6 +7,7 @@ from adminbackendapi.models import Doctor
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 import re
+import datetime
 
 class Patient(models.Model):
 	BLOOD_GROUP_CHOICES = [
@@ -37,7 +38,7 @@ class Patient(models.Model):
 		if self.dob > timezone.now().date():
 			raise ValidationError({'dob': 'Date of birth cannot be in the future.'})
 		# reg_date cannot be in future
-		if self.reg_date > timezone.now().date():
+		if self.dob and self.dob > datetime.date.today():
 			raise ValidationError({'reg_date': 'Registration date cannot be in the future.'})
 		# email validation (extra regex)
 		email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
@@ -81,10 +82,11 @@ class Appointment(models.Model):
 
 # ReceptionBill model
 
+
 class ReceptionBill(models.Model):
 	bill_id = models.AutoField(primary_key=True)
-	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='bills')
-	appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='bills')
+	patient = models.ForeignKey(Patient, to_field='Patient_id', on_delete=models.CASCADE, related_name='bills')
+	appointment = models.ForeignKey(Appointment, to_field='appointment_id', on_delete=models.CASCADE, related_name='bills')
 	reg_fee = models.DecimalField(max_digits=8, decimal_places=2)
 	doc_fee = models.DecimalField(max_digits=8, decimal_places=2, editable=False)
 	total = models.DecimalField(max_digits=8, decimal_places=2, editable=False)
@@ -98,5 +100,5 @@ class ReceptionBill(models.Model):
 		super().save(*args, **kwargs)
 
 	def __str__(self):
-		return f"Bill for {self.patient} (Appointment {self.appointment.id}) - Total: {self.total}" 
+		return f"Bill for {self.patient} (Appointment {self.appointment.appointment_id}) - Total: {self.total}" 
 
