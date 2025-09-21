@@ -87,7 +87,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'faithinfotech',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': 3306
     }
 }
 
@@ -134,13 +134,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    ]
-
+    ),
 }
 
 

@@ -1,23 +1,14 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets, permissions
+from Authentication.permissions import IsAdminOrReadOnly
+from rest_framework import viewsets
 from .models import Role, Specialization, Staff, Doctor
 from .serializers import (
     RoleSerializer, SpecializationSerializer,
     StaffSerializer, DoctorSerializer
 )
 
-# ---- Optional custom permission ----
-class IsAdminOrReadOnly(permissions.BasePermission):
-    """
-    Allow only Admin users to create/update/delete.
-    Others can only view (GET).
-    """
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return request.user and request.user.is_staff  # Django admin user
 
 
 class RoleViewSet(viewsets.ModelViewSet):

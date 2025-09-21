@@ -3,5 +3,4 @@ __pycache__/
 *.pyo
 *.pyd
 myvenv/
-settings.py
 migrations/
