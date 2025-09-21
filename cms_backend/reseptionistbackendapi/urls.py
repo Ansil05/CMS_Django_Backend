@@ -7,6 +7,4 @@ router.register(r'patients', PatientViewSet)
 router.register(r'appointments', AppointmentViewSet)
 router.register(r'bills', ReceptionBillViewSet)
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls
