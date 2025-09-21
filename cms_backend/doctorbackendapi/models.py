@@ -1,14 +1,15 @@
 from django.db import models
+from reseptionistbackendapi.models import Appointment
 
 class Consultation(models.Model):
     consultation_id = models.AutoField(primary_key=True)
-    appointment = models.ForeignKey("appointments.Appointment", on_delete=models.CASCADE, related_name="consultations")
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name="consultations")
     symptoms = models.TextField()
     notes = models.TextField(blank=True, null=True)
     diagnosis = models.TextField()
 
     def __str__(self):
-        return f"Consultation {self.consultation_id} for Appointment {self.appointment_id}"
+        return f"Consultation {self.consultation_id} for Appointment {self.appointment.appointment_id}"
 
 
 class Prescription(models.Model):
