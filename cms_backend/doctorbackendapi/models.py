@@ -3,7 +3,8 @@ from reseptionistbackendapi.models import Appointment
 
 class Consultation(models.Model):
     consultation_id = models.AutoField(primary_key=True)
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='consultations')
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name="consultations")
+    symptoms = models.TextField()
     notes = models.TextField(blank=True, null=True)
     diagnosis = models.TextField()
 

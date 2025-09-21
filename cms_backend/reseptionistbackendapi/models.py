@@ -63,7 +63,8 @@ class Appointment(models.Model):
 	token_number = models.IntegerField(unique=True)
 	doc_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
 	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
-	appointment_date = models.DateTimeField()
+	appointment_date = models.DateField()
+	appointment_time = models.TimeField()
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	def clean(self):

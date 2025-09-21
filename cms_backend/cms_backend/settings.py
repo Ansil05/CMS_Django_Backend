@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'cms_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cms_django_db',
+        'NAME': 'clinic_django_db',
         'USER': 'root',
         'PASSWORD': 'thahseel',
         'HOST': 'localhost',
