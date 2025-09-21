@@ -5,7 +5,7 @@ from .views import RoleViewSet, SpecializationViewSet, StaffViewSet, DoctorViewS
 router = DefaultRouter()
 router.register(r'roles', RoleViewSet)
 router.register(r'specializations', SpecializationViewSet)
-router.register(r'staff', StaffViewSet)
+router.register(r'staffs', StaffViewSet)
 router.register(r'doctors', DoctorViewSet)
 
 urlpatterns = router.urls
