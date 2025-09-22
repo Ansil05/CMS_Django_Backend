@@ -26,7 +26,7 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
-    Role = RoleSerializer()
+    Role = RoleSerializer(read_only=True)
 
     class Meta:
         model = Staff
@@ -58,8 +58,8 @@ class StaffSerializer(serializers.ModelSerializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    Staff = StaffSerializer()
-    Specialization = SpecializationSerializer()
+    Staff = StaffSerializer(read_only=True  )
+    Specialization = SpecializationSerializer(  read_only=True)
 
     class Meta:
         model = Doctor
