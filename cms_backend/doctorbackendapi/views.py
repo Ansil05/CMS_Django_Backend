@@ -3,12 +3,12 @@ from Authentication.permissions import IsDoctor
 # Create your views here.
 from rest_framework import viewsets
 from .models import Consultation, Prescription, LabPrescription
-from labtechbackendapi.models import Labtest
+from labtechbackendapi.models import LabTest
 from .serializers import (
     ConsultationSerializer,
     PrescriptionSerializer,
     LabPrescriptionSerializer,
-    LabTestSerializer,
+    LabTestSerializer
 )
 
 class ConsultationViewSet(viewsets.ModelViewSet):
@@ -27,6 +27,6 @@ class LabPrescriptionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsDoctor]
 
 class LabTestViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Labtest.objects.all()
+    queryset = LabTest.objects.all()
     serializer_class = LabTestSerializer
     permission_classes = [IsDoctor]

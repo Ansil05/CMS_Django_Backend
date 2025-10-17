@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import Consultation, Prescription, LabPrescription
-from labtechbackendapi.models import Labtest
+from labtechbackendapi.models import LabTest
 
 class LabTestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Labtest
+        model = LabTest
         fields = '__all__'
 
 class PrescriptionSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class PrescriptionSerializer(serializers.ModelSerializer):
 class LabPrescriptionSerializer(serializers.ModelSerializer):
     testname = LabTestSerializer(read_only=True)
     testname_id = serializers.PrimaryKeyRelatedField(
-        queryset=Labtest.objects.all(), source='testname', write_only=True
+        queryset=LabTest.objects.all(), source='testname', write_only=True
     )
 
     class Meta:
