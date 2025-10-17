@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'labtechbackendapi',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'corsheaders',
+    'Authentication',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'cms_backend.urls'
@@ -76,6 +79,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'cms_backend.wsgi.application'
+
 
 
 # Database
@@ -156,3 +160,5 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
