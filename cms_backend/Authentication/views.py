@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from .serializers import SignUpSerializer, LoginSerializer
-
+from Authentication.permissions import IsAdminOrReadOnly
 # Helper function to generate tokens
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -16,7 +16,7 @@ def get_tokens_for_user(user):
 
 class SignUpAPIView(APIView):
     """This API will handle signup"""
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAdminOrReadOnly]
 
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)

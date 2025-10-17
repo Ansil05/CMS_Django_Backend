@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/admin/', include('adminbackendapi.urls')),
     path('api/reception/', include('reseptionistbackendapi.urls')),
     path('auth/', include('Authentication.urls')),
-    # path('api/labtech/', include('labtechbackendapi.urls')),
+    path('api/labtech/', include('labtechbackendapi.urls')),
     path('api/pharmacy/', include('pharmasistbackendapi.urls')),
+    path('api/doctor/', include('doctorbackendapi.urls')),
 ]
