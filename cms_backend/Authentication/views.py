@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from .serializers import SignUpSerializer, LoginSerializer
 from Authentication.permissions import IsAdminOrReadOnly
+from django.contrib.auth.models import Group
 # Helper function to generate tokens
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -16,7 +17,7 @@ def get_tokens_for_user(user):
 
 class SignUpAPIView(APIView):
     """This API will handle signup"""
-    permission_classes = [IsAdminOrReadOnly]
+    # permission_classes = [IsAdminOrReadOnly]
 
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)
@@ -27,8 +28,12 @@ class SignUpAPIView(APIView):
             return Response({
                 "user_id": user.id,
                 "username": user.username,
-                "role": user.groups.all()[0].id if user.groups.exists() else None,
-                # "tokens": tokens
+                # Provide roles as group names so frontend can display role labels.
+                # "roles" is a list of all group names the user belongs to.
+                # "role" remains a primary role (first group) or None.
+                "roles": [g.name for g in user.groups.all()] if user.groups.exists() else [],
+                "role": user.groups.all()[0].name if user.groups.exists() else None,
+                "tokens": tokens
             }, status=status.HTTP_201_CREATED)
         else:
             return Response({
@@ -54,7 +59,9 @@ class LoginAPIView(APIView):
                     "status": status.HTTP_200_OK,
                     "message": "success",
                     "username": user.username,
-                    "role": user.groups.all()[0].id if user.groups.exists() else None,
+                    # Return user roles as group names.
+                    "roles": [g.name for g in user.groups.all()] if user.groups.exists() else [],
+                    "role": user.groups.all()[0].name if user.groups.exists() else None,
                     "tokens": tokens
                 }, status=status.HTTP_200_OK)
             else:
@@ -68,3 +75,9 @@ class LoginAPIView(APIView):
             "message": "bad request",
             "data": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GroupList(APIView):
+    def get(self, request):
+        groups = Group.objects.values('id', 'name')
+        return Response(groups)

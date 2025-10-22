@@ -5,7 +5,6 @@ from rest_framework.validators import UniqueValidator
 from rest_framework import permissions
 
 
-
 class SignUpSerializer(serializers.ModelSerializer):
     permission_classes = [permissions.AllowAny]
     role = serializers.CharField(write_only=True, required=True)
