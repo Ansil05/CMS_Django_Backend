@@ -1,6 +1,13 @@
 from rest_framework import serializers
 from .models import Role, Specialization, Staff, Doctor
 from datetime import date
+from django.contrib.auth.models import Group
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']  # You can add 'permissions' if needed
+
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -26,11 +33,11 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
-    Role = RoleSerializer(read_only=True)
+    Role = GroupSerializer(read_only=True)
 
     class Meta:
         model = Staff
-        fields = ["FirstName", "LastName", "DOB", "PhoneNumber", "Role", "Email", "Address","PhoneNumber","Address","HireDate","IsActive"]
+        fields = ["FirstName", "LastName", "DOB", "PhoneNumber", "Gender", "Role", "Email", "Address", "PhoneNumber", "Address", "HireDate", "IsActive"]
 
     def validate_FirstName(self, value):
         if not value.isalpha():
