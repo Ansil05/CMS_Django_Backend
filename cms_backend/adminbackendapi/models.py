@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import Group
 
 # Create your models here.
 class Role(models.Model):
@@ -24,7 +25,7 @@ class Staff(models.Model):
     LastName = models.CharField(max_length=100)
     DOB = models.DateField(null=False, blank=False)
     Gender = models.CharField(max_length=10, choices=[('Male', 'male'), ('Female', 'female'), ('Other', 'other')])
-    Role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    Role = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True)
     Email = models.EmailField(unique=True,null=False, blank=False)
     PhoneNumber = models.CharField(max_length=15, blank=False, null=False)
     Address = models.TextField(max_length=500, blank=False, null=False)
