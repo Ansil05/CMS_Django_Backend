@@ -16,7 +16,7 @@ def get_tokens_for_user(user):
 
 class SignUpAPIView(APIView):
     """This API will handle signup"""
-    permission_classes = [IsAdminOrReadOnly]
+    # permission_classes = [IsAdminOrReadOnly]
 
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)
