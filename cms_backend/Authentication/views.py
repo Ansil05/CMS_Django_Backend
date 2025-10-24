@@ -33,7 +33,7 @@ class SignUpAPIView(APIView):
                 # "role" remains a primary role (first group) or None.
                 "roles": [g.name for g in user.groups.all()] if user.groups.exists() else [],
                 "role": user.groups.all()[0].name if user.groups.exists() else None,
-                "tokens": tokens
+                # "tokens": tokens
             }, status=status.HTTP_201_CREATED)
         else:
             return Response({

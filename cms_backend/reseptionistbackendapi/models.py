@@ -69,7 +69,8 @@ class Appointment(models.Model):
 
 	def clean(self):
 		# appointment_date cannot be in the past
-		if self.appointment_date < timezone.now():
+		today = timezone.now().date()
+		if self.appointment_date < today:
 			raise ValidationError({'appointment_date': 'Appointment date cannot be in the past.'})
 
 	def save(self, *args, **kwargs):

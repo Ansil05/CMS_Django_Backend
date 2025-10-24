@@ -12,7 +12,7 @@ class PatientViewSet(viewsets.ModelViewSet):
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [IsReceptionist]
+    #permission_classes = [IsReceptionist]
 
 class ReceptionBillViewSet(viewsets.ModelViewSet):
     queryset = ReceptionBill.objects.all()
