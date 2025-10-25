@@ -33,11 +33,11 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
-    Role = GroupSerializer(read_only=True)
+    Role = RoleSerializer()
 
     class Meta:
         model = Staff
-        fields = ["FirstName", "LastName", "DOB", "PhoneNumber", "Gender", "Role", "Email", "Address", "PhoneNumber", "Address", "HireDate", "IsActive"]
+        fields = ["StaffId","FirstName", "LastName", "DOB", "PhoneNumber", "Gender", "Role", "Email", "Address", "PhoneNumber", "Address", "HireDate", "IsActive"]
 
     def validate_FirstName(self, value):
         if not value.isalpha():
@@ -65,7 +65,7 @@ class StaffSerializer(serializers.ModelSerializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    Staff = StaffSerializer(read_only=True  )
+    Staff = StaffSerializer(read_only=True )
     Specialization = SpecializationSerializer(  read_only=True)
 
     class Meta:

@@ -23,7 +23,7 @@ class SignUpAPIView(APIView):
         serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            # tokens = get_tokens_for_user(user)
+            tokens = get_tokens_for_user(user)
 
             return Response({
                 "user_id": user.id,
