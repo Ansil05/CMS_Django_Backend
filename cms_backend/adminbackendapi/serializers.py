@@ -70,7 +70,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctor
-        fields = ["Staff", "Specialization", "ConsultationFee", "availability", "YearsOfExperience"]
+        fields = ["DoctorId","Staff", "Specialization", "ConsultationFee", "availability", "YearsOfExperience"]
 
     def validate_ConsultationFee(self, value):
         if value < 0:
