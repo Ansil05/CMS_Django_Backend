@@ -7,16 +7,16 @@ from Authentication.permissions import IsReceptionist
 class PatientViewSet(viewsets.ModelViewSet):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
-    permission_classes = [IsReceptionist]
+    # permission_classes = [IsReceptionist]
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [IsReceptionist]
+    # permission_classes = [IsReceptionist]
 
 class ReceptionBillViewSet(viewsets.ModelViewSet):
     queryset = ReceptionBill.objects.all()
     serializer_class = ReceptionBillSerializer
-    permission_classes = [IsReceptionist]
+    # permission_classes = [IsReceptionist]
 
 # Create your views here.
