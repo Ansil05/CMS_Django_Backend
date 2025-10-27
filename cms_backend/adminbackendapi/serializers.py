@@ -33,11 +33,15 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
-    Role = GroupSerializer(read_only=True)
+    Role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), write_only=True)
+    RoleDetail = RoleSerializer(source='Role', read_only=True)
 
     class Meta:
         model = Staff
-        fields = ["FirstName", "LastName", "DOB", "PhoneNumber", "Gender", "Role", "Email", "Address", "PhoneNumber", "Address", "HireDate", "IsActive"]
+        fields = [
+            "StaffId", "FirstName", "LastName", "DOB", "PhoneNumber", "Gender",
+            "Role", "RoleDetail", "Email", "Address", "HireDate", "IsActive"
+        ]
 
     def validate_FirstName(self, value):
         if not value.isalpha():
@@ -65,12 +69,14 @@ class StaffSerializer(serializers.ModelSerializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    Staff = StaffSerializer(read_only=True  )
-    Specialization = SpecializationSerializer(  read_only=True)
+    Staff = serializers.PrimaryKeyRelatedField(queryset=Staff.objects.all(), write_only=True)
+    StaffDetail = StaffSerializer(source='Staff', read_only=True)
+    Specialization = serializers.PrimaryKeyRelatedField(queryset=Specialization.objects.all(), write_only=True)
+    SpecializationDetails = SpecializationSerializer(source='Specialization', read_only=True)
 
     class Meta:
         model = Doctor
-        fields = ["Staff", "Specialization", "ConsultationFee", "availability", "YearsOfExperience"]
+        fields = ["DoctorId","Staff", "StaffDetail", "Specialization", "SpecializationDetails", "ConsultationFee", "availability", "YearsOfExperience"]
 
     def validate_ConsultationFee(self, value):
         if value < 0:
