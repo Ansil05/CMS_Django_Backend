@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from .serializers import SignUpSerializer, LoginSerializer
 from Authentication.permissions import IsAdminOrReadOnly
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 # Helper function to generate tokens
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -23,7 +24,7 @@ class SignUpAPIView(APIView):
         serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            # tokens = get_tokens_for_user(user)
+            tokens = get_tokens_for_user(user)
 
             return Response({
                 "user_id": user.id,
@@ -41,6 +42,49 @@ class SignUpAPIView(APIView):
                 "data": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
+class DeleteUserByEmailAPIView(APIView):
+    """Delete a user using their email address"""
+    permission_classes = [permissions.AllowAny]  # Allow any user to delete
+
+    def delete(self, request):
+        email = request.data.get("email")
+
+        if not email:
+            return Response(
+                {"error": "Email is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(email=email)
+            user.delete()
+            return Response(
+                {"success": f"User with email '{email}' deleted successfully."},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {"error": f"No user found with email '{email}'"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class CheckUsernameAPIView(APIView):
+    """Checks if a username already exists"""
+
+    def post(self, request):
+        username = request.data.get("username")
+        exists = User.objects.filter(username=username).exists()
+        return Response({"exists": exists})
+
+class CheckEmailAPIView(APIView):
+    """Checks if an email already exists"""
+
+    def post(self, request):
+        email = request.data.get("email")
+        exists = User.objects.filter(email=email).exists()
+        return Response({"exists": exists})
 
 class LoginAPIView(APIView):
     """This API will handle login and return JWT tokens"""

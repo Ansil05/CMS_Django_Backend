@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'clinic_django_db',
         'USER': 'root',
-        'PASSWORD': 'faithinfotech',
+        'PASSWORD': 'faith',
         'HOST': 'localhost',
         'PORT': 3306
     }
