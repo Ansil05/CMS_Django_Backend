@@ -8,6 +8,40 @@ from .serializers import SignUpSerializer, LoginSerializer
 from Authentication.permissions import IsAdminOrReadOnly
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+
+def SendEmail(user, raw_password=None):
+    """
+    Sends login credentials to the user via Gmail SMTP using Django's email backend.
+    """
+    subject = "Login Credentials to CMS"
+    body = f"""
+Hello User,
+
+Your CMS account has been created successfully.
+
+Please use the following credentials to log in:
+
+Username: {user.username}
+Password: {raw_password if raw_password else '(Set during registration)'}
+
+Best regards,
+CMS Bot
+"""
+
+    try:
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False,
+        )
+        print(f"✅ Email sent successfully to {user.email}")
+    except Exception as e:
+        print(f"❌ Error sending email: {e}")
+
 # Helper function to generate tokens
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -25,6 +59,14 @@ class SignUpAPIView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             tokens = get_tokens_for_user(user)
+
+            
+            raw_password = request.data.get("password")
+
+            try:
+                SendEmail(user, raw_password)
+            except Exception as e:
+                print(f"Error sending email: {e}")
 
             return Response({
                 "user_id": user.id,
