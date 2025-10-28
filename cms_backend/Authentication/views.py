@@ -145,6 +145,7 @@ class LoginAPIView(APIView):
                     "status": status.HTTP_200_OK,
                     "message": "success",
                     "username": user.username,
+                    "email": user.email  ,
                     # Return user roles as group names.
                     "roles": [g.name for g in user.groups.all()] if user.groups.exists() else [],
                     "role": user.groups.all()[0].name if user.groups.exists() else None,
