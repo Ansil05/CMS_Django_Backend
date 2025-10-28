@@ -59,27 +59,27 @@ class Patient(models.Model):
 
 
 class Appointment(models.Model):
-	appointment_id = models.AutoField(primary_key=True)
-	token_number = models.IntegerField(unique=True)
-	doc_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-	patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
-	appointment_date = models.DateField()
-	appointment_time = models.TimeField()
-	created_at = models.DateTimeField(auto_now_add=True)
+    appointment_id = models.AutoField(primary_key=True)
+    token_number = models.IntegerField(unique=True)
+    doc_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
+    appointment_date = models.DateField()
+    appointment_time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-	def clean(self):
-		# appointment_date cannot be in the past
-		if self.appointment_date < timezone.now():
-			raise ValidationError({'appointment_date': 'Appointment date cannot be in the past.'})
+    def clean(self):
+        # FIXED: Compare date with date
+        if self.appointment_date < timezone.now().date():
+            raise ValidationError({'appointment_date': 'Appointment date cannot be in the past.'})
 
-	def save(self, *args, **kwargs):
-		if not self.token_number:
-			last_token = Appointment.objects.aggregate(models.Max('token_number'))['token_number__max'] or 0
-			self.token_number = last_token + 1
-		super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.token_number:
+            last_token = Appointment.objects.aggregate(models.Max('token_number'))['token_number__max'] or 0
+            self.token_number = last_token + 1
+        super().save(*args, **kwargs)
 
-	def __str__(self):
-		return f"{self.appointment_id} - {self.patient.first_name} {self.patient.last_name}"
+    def __str__(self):
+        return f"{self.appointment_id} - {self.patient.first_name} {self.patient.last_name}"
 
 # ReceptionBill model
 

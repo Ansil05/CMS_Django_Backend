@@ -29,18 +29,31 @@ class BasePharmacyPermission(permissions.BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
         
-        # Allow all authenticated users for safe methods
+        # Allow all authenticated users for safe methods (GET, HEAD, OPTIONS)
         if request.method in permissions.SAFE_METHODS:
             return True
+        
+        # For write operations (POST, PUT, DELETE):
+        # Allow if user is staff
+        if request.user.is_staff or request.user.is_superuser:
+            return True
             
-        # Check if user has appropriate role (can be customized based on your user model)
-        return (hasattr(request.user, 'role') and 
-                request.user.role in ['PHARMACIST', 'ADMIN', 'DOCTOR']) or request.user.is_staff
+        # Check if user has role and convert to uppercase for comparison
+        if hasattr(request.user, 'role'):
+            user_role = str(request.user.role).upper()  # ← Convert to uppercase
+            return user_role in ['PHARMACIST', 'ADMIN', 'DOCTOR']
+        
+        # Fallback: deny access
+        return False
 
     def has_object_permission(self, request, view, obj):
         """Check if user has permission for specific object"""
         # Safe methods allowed for all authenticated users
         if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        # Staff/superuser can do anything
+        if request.user.is_staff or request.user.is_superuser:
             return True
             
         # Only allow modification by staff or object creator
@@ -57,7 +70,7 @@ class MedicineViewSet(viewsets.ModelViewSet):
     queryset = Medicine.objects.all()
     serializer_class = MedicineSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [BasePharmacyPermission]
+    permission_classes = [permissions.IsAuthenticated]
     
     # Filtering and search configuration
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -75,14 +88,10 @@ class MedicineViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         """
-        Instantiate and return the list of permissions required for this view
+         Allow all authenticated users for all actions (development mode)
         """
-        if self.action in ['list', 'retrieve', 'low_stock', 'expiring_soon', 'inventory_report']:
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [BasePharmacyPermission]
+        permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
-
     def get_queryset(self):
         """
         Optionally filter queryset based on user role and request parameters
@@ -336,10 +345,10 @@ class BillViewSet(viewsets.ModelViewSet):
     """
     ViewSet for Bill model with comprehensive CRUD operations
     """
-    queryset = Bill.objects.all()
+    # queryset = Bill.objects.all()
     serializer_class = BillSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [BasePharmacyPermission]
+    permission_classes = [permissions.IsAuthenticated]
     
     # Filtering and search configuration
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -358,20 +367,16 @@ class BillViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         """
-        Set permissions based on action
+         Allow all authenticated users for all actions (development mode)
         """
-        if self.action in ['list', 'retrieve', 'patient_bills', 'billing_report']:
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [BasePharmacyPermission]
+        permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
         """
         Filter queryset based on user role and request parameters
         """
-        queryset = Bill.objects.all()
-        
+        queryset = Bill.objects.select_related('patient_id', 'created_by').all()        
         # Filter by status if specified
         status_filter = self.request.query_params.get('status_filter', None)
         if status_filter:
