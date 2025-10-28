@@ -82,11 +82,13 @@ class Appointment(models.Model):
             self.token_number = last_token + 1
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f"{self.appointment_id} - {self.patient.first_name} {self.patient.last_name}"
-    
-    class Meta:
-        ordering = ['-created_at']
+	def __str__(self):
+		return f"{self.appointment_id} - {self.patient.first_name} {self.patient.last_name}"
+
+	class Meta:
+		ordering = ['-created_at', '-appointment_date', '-appointment_time']
+
+# ReceptionBill model
 
 
 class ReceptionBill(models.Model):

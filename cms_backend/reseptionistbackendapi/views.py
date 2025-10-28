@@ -10,7 +10,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsReceptionist]
 
 class AppointmentViewSet(viewsets.ModelViewSet):
-    queryset = Appointment.objects.all()
+    queryset = Appointment.objects.select_related('patient', 'doc_id').order_by('-created_at', '-appointment_date', '-appointment_time')
     serializer_class = AppointmentSerializer
     # permission_classes = [IsReceptionist]
 
