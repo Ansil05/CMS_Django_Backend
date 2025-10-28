@@ -1,13 +1,6 @@
 from rest_framework import serializers
 from .models import Role, Specialization, Staff, Doctor
 from datetime import date
-from django.contrib.auth.models import Group
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['id', 'name']  # You can add 'permissions' if needed
-
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -33,6 +26,7 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
     Role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), write_only=True)
     RoleDetail = RoleSerializer(source='Role', read_only=True)
 
@@ -42,6 +36,19 @@ class StaffSerializer(serializers.ModelSerializer):
             "StaffId", "FirstName", "LastName", "DOB", "PhoneNumber", "Gender",
             "Role", "RoleDetail", "Email", "Address", "HireDate", "IsActive"
         ]
+=======
+    StaffRole = RoleSerializer(read_only=True)  # Changed from Role to StaffRole
+    StaffRole_id = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(), 
+        source='StaffRole', 
+        write_only=True
+    )
+
+    class Meta:
+        model = Staff
+        fields = ["StaffId", "FirstName", "LastName", "DOB", "PhoneNumber", "Gender", 
+                  "StaffRole", "StaffRole_id", "Email", "Address", "HireDate", "IsActive"]
+>>>>>>> teamperson
 
     def validate_FirstName(self, value):
         if not value.isalpha():
@@ -87,16 +94,3 @@ class DoctorSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Years of experience cannot be negative.")
         return value
-
-    def validate(self, data):
-        # Custom cross-field validation
-        staff = data.get("Staff")
-        specialization = data.get("Specialization")
-
-        if Doctor.objects.filter(Staff=staff).exists() and self.instance is None:
-            raise serializers.ValidationError("This staff member is already assigned as a doctor.")
-
-        if staff.Role and staff.Role.RoleName.lower() != "doctor":
-            raise serializers.ValidationError("Staff role must be 'Doctor' to be registered as a doctor.")
-
-        return data

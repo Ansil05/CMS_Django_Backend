@@ -236,6 +236,11 @@ class BillSerializer(serializers.ModelSerializer):
     created_by_name = serializers.CharField(source='created_by.get_full_name', read_only=True)
     created_by_username = serializers.CharField(source='created_by.username', read_only=True)
     days_overdue = serializers.SerializerMethodField()
+    patient_name = serializers.SerializerMethodField()
+    patient_contact = serializers.SerializerMethodField()
+
+
+
     
     class Meta:
         model = Bill
@@ -244,7 +249,7 @@ class BillSerializer(serializers.ModelSerializer):
             'total_amount', 'paid_amount', 'status', 'bill_date', 'due_date',
             'notes', 'created_by', 'balance_amount', 'is_overdue', 
             'payment_percentage', 'created_by_name', 'created_by_username',
-            'days_overdue'
+            'days_overdue', 'patient_name', 'patient_contact'
         ]
         read_only_fields = ('bill_id', 'serial_number', 'bill_date', 'balance_amount',
                            'is_overdue', 'payment_percentage')
@@ -268,6 +273,21 @@ class BillSerializer(serializers.ModelSerializer):
             )
             
         return value
+    def get_patient_name(self, obj):
+        try:
+            if hasattr(obj, 'patient_id') and obj.patient_id:
+                if hasattr(obj.patient_id, 'first_name'):
+                    return f"{obj.patient_id.first_name} {obj.patient_id.last_name}"
+        except Exception as e:
+            print(f"Error getting patient name: {e}")
+        return "N/A"
+
+    def get_patient_contact(self, obj):
+        if obj.patient_id:
+            return obj.patient_id.phone_no
+        return "N/A"
+        
+
 
     def validate_patient_id(self, value):
         """Field-level validation for patient ID"""

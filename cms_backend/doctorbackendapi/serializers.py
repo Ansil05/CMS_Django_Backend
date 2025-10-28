@@ -3,15 +3,18 @@ from .models import Consultation, Prescription, LabPrescription
 from reseptionistbackendapi.models import Appointment, Patient
 from labtechbackendapi.models import Labtest
 
+
 class LabTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Labtest
         fields = '__all__'
 
+
 class PrescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prescription
         exclude = ['consultation']  # Do not require 'consultation' on nested create
+
 
 class LabPrescriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,6 +40,7 @@ class AppointmentSimpleSerializer(serializers.ModelSerializer):
             "doc_id",
             "patient"
         ]
+
 
 class ConsultationSerializer(serializers.ModelSerializer):
     prescriptions = PrescriptionSerializer(many=True)
