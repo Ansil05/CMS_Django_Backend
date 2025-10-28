@@ -208,28 +208,14 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 class PrescriptionViewSet(viewsets.ModelViewSet):
     queryset = Prescription.objects.all()
     serializer_class = PrescriptionSerializer
-<<<<<<< HEAD
     #permission_classes = [IsDoctor]
-=======
-    permission_classes = [IsAuthenticated]
-
->>>>>>> teamperson
 
 class LabPrescriptionViewSet(viewsets.ModelViewSet):
     queryset = LabPrescription.objects.all()
     serializer_class = LabPrescriptionSerializer
-<<<<<<< HEAD
     # permission_classes = [IsDoctor]
-=======
-    permission_classes = [IsAuthenticated]
-
->>>>>>> teamperson
 
 class LabTestViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Labtest.objects.all()
     serializer_class = LabTestSerializer
-<<<<<<< HEAD
     # permission_classes = [IsDoctor]
-=======
-    permission_classes = [IsAuthenticated]
->>>>>>> teamperson

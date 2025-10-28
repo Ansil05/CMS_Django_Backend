@@ -26,7 +26,6 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class StaffSerializer(serializers.ModelSerializer):
-<<<<<<< HEAD
     Role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), write_only=True)
     RoleDetail = RoleSerializer(source='Role', read_only=True)
 
@@ -36,19 +35,6 @@ class StaffSerializer(serializers.ModelSerializer):
             "StaffId", "FirstName", "LastName", "DOB", "PhoneNumber", "Gender",
             "Role", "RoleDetail", "Email", "Address", "HireDate", "IsActive"
         ]
-=======
-    StaffRole = RoleSerializer(read_only=True)  # Changed from Role to StaffRole
-    StaffRole_id = serializers.PrimaryKeyRelatedField(
-        queryset=Role.objects.all(), 
-        source='StaffRole', 
-        write_only=True
-    )
-
-    class Meta:
-        model = Staff
-        fields = ["StaffId", "FirstName", "LastName", "DOB", "PhoneNumber", "Gender", 
-                  "StaffRole", "StaffRole_id", "Email", "Address", "HireDate", "IsActive"]
->>>>>>> teamperson
 
     def validate_FirstName(self, value):
         if not value.isalpha():
