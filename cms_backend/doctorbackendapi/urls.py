@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ConsultationViewSet, PrescriptionViewSet, LabPrescriptionViewSet
+from .views import ConsultationViewSet, PrescriptionViewSet, LabPrescriptionViewSet  # Import only existing viewsets
 
 router = DefaultRouter()
 router.register(r'consultations', ConsultationViewSet)
